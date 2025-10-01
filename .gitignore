@@ -1,0 +1,56 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# ==========================
+# Datasets (large audio files)
+# ==========================
+dataset/
+*.wav
+*.mp3
+*.flac
+*.m4a
+
+# ==========================
+# Models and Training Outputs
+# ==========================
+models/*.h5
+models/*.pkl
+models/*.json
+models/*.png
+training_history.json
+
+# ==========================
+# OS / Editor files
+# ==========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ==========================
+# Node / Frontend (if generated)
+# ==========================
+node_modules/
+dist/
+build/
+
+# ==========================
+# IDE settings
+# ==========================
+.vscode/
+.idea/

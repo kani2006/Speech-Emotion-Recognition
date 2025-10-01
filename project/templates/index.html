@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Emotion AI Assistant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .title i {
+            margin-right: 15px;
+            color: #ffd700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 500px;
+            background: #f8f9fa;
+        }
+
+        .welcome-message {
+            margin-bottom: 20px;
+        }
+
+        /* Message Styles */
+        .bot-message, .user-message {
+            display: flex;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin: 0 15px;
+            flex-shrink: 0;
+        }
+
+        .bot-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .bot-message .message-content {
+            background: white;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .emotion-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .emotion-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Input Section */
+        .input-section {
+            padding: 30px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .text-input-container {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #textInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #textInput:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .record-btn, .stop-btn, .upload-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .record-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .stop-btn {
+            background: linear-gradient(135deg, #feca57, #ff9ff3);
+            color: white;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #48dbfb, #0abde3);
+            color: white;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 219, 251, 0.4);
+        }
+
+        /* Recording Indicator */
+        .recording-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+            }
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        #statusIcon {
+            font-size: 0.8rem;
+        }
+
+        .status-ready #statusIcon {
+            color: #2ecc71;
+        }
+
+        .status-processing #statusIcon {
+            color: #f39c12;
+            animation: blink 1s infinite;
+        }
+
+        .status-error #statusIcon {
+            color: #e74c3c;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Emotion-specific colors */
+        .emotion-happy { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); color: #2d3436; }
+        .emotion-sad { background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; }
+        .emotion-angry { background: linear-gradient(135deg, #fd79a8, #e84393); color: white; }
+        .emotion-fearful { background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; }
+        .emotion-surprised { background: linear-gradient(135deg, #fd79a8, #fdcb6e); color: #2d3436; }
+        .emotion-disgust { background: linear-gradient(135deg, #00b894, #00a085); color: white; }
+        .emotion-neutral { background: linear-gradient(135deg, #ddd, #bbb); color: #2d3436; }
+        .emotion-calm { background: linear-gradient(135deg, #81ecec, #00cec9); color: #2d3436; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .audio-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            #textInput {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .chat-container {
+                padding: 20px;
+            }
+            
+            .input-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <i class="fas fa-brain"></i>
+                    Emotion AI Assistant
+                </h1>
+                <p class="subtitle">Share your feelings through voice or text, and get empathetic AI responses</p>
+            </div>
+        </header>
+
+        <!-- Main Chat Interface -->
+        <main class="main-content">
+            <!-- Chat Messages Container -->
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message">
+                    <div class="bot-message">
+                        <div class="message-avatar bot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your Emotion AI Assistant. 🤖</p>
+                            <p>I can understand your emotions from both voice and text, and provide empathetic responses.</p>
+                            <p>Try recording a voice message or typing how you feel!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Controls -->
+            <div class="input-section">
+                <!-- Text Input -->
+                <div class="text-input-container">
+                    <div class="input-group">
+                        <input type="text" 
+                               id="textInput" 
+                               placeholder="Type how you're feeling..." 
+                               maxlength="500">
+                        <button id="sendTextBtn" class="send-btn" title="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Audio Controls -->
+                <div class="audio-controls">
+                    <button id="recordBtn" class="record-btn" title="Record voice message">
+                        <i class="fas fa-microphone"></i>
+                        <span>Record</span>
+                    </button>
+                    
+                    <button id="stopBtn" class="stop-btn" style="display: none;" title="Stop recording">
+                        <i class="fas fa-stop"></i>
+                        <span>Stop</span>
+                    </button>
+                    
+                    <div class="recording-indicator" id="recordingIndicator" style="display: none;">
+                        <div class="pulse"></div>
+                        <span>Recording...</span>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div class="file-upload-container">
+                    <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+                    <button id="uploadBtn" class="upload-btn" title="Upload audio file">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Audio</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Status Bar -->
+        <div class="status-bar" id="statusBar">
+            <div class="status-indicator">
+                <i class="fas fa-circle" id="statusIcon"></i>
+                <span id="statusText">Ready</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Analyzing emotions...</p>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div class="modal" id="errorModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                <button class="close-btn" id="closeErrorModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage">An error occurred. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class EmotionAI {
+            constructor() {
+                this.apiUrl = 'http://localhost:5000';
+                this.mediaRecorder = null;
+                this.audioChunks = [];
+                this.isRecording = false;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.checkServerHealth();
+            }
+
+            initializeElements() {
+                // Chat elements
+                this.chatContainer = document.getElementById('chatContainer');
+                
+                // Input elements
+                this.textInput = document.getElementById('textInput');
+                this.sendTextBtn = document.getElementById('sendTextBtn');
+                
+                // Audio elements
+                this.recordBtn = document.getElementById('recordBtn');
+                this.stopBtn = document.getElementById('stopBtn');
+                this.uploadBtn = document.getElementById('uploadBtn');
+                this.audioFileInput = document.getElementById('audioFileInput');
+                this.recordingIndicator = document.getElementById('recordingIndicator');
+                
+                // Status elements
+                this.statusBar = document.getElementById('statusBar');
+                this.statusIcon = document.getElementById('statusIcon');
+                this.statusText = document.getElementById('statusText');
+                
+                // Modal elements
+                this.loadingOverlay = document.getElementById('loadingOverlay');
+                this.errorModal = document.getElementById('errorModal');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.closeErrorModal = document.getElementById('closeErrorModal');
+            }
+
+            bindEvents() {
+                // Text input events
+                this.sendTextBtn.addEventListener('click', () => this.sendTextMessage());
+                this.textInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendTextMessage();
+                    }
+                });
+
+                // Audio recording events
+                this.recordBtn.addEventListener('click', () => this.startRecording());
+                this.stopBtn.addEventListener('click', () => this.stopRecording());
+                
+                // File upload events
+                this.uploadBtn.addEventListener('click', () => this.audioFileInput.click());
+                this.audioFileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+                
+                // Modal events
+                this.closeErrorModal.addEventListener('click', () => this.hideErrorModal());
+                
+                // Click outside modal to close
+                this.errorModal.addEventListener('click', (e) => {
+                    if (e.target === this.errorModal) {
+                        this.hideErrorModal();
+                    }
+                });
+            }
+
+            async checkServerHealth() {
+                try {
+                    const response = await fetch(`${this.apiUrl}/health`);
+                    if (response.ok) {
+                        this.updateStatus('ready', 'Connected');
+                    } else {
+                        this.updateStatus('error', 'Server Error');
+                    }
+                } catch (error) {
+                    this.updateStatus('error', 'Server Offline');
+                    console.error('Server health check failed:', error);
+                }
+            }
+
+            updateStatus(type, message) {
+                this.statusBar.className = `status-bar status-${type}`;
+                this.statusText.textContent = message;
+            }
+
+            showLoading() {
+                this.loadingOverlay.style.display = 'flex';
+                this.updateStatus('processing', 'Processing...');
+            }
+
+            hideLoading() {
+                this.loadingOverlay.style.display = 'none';
+                this.updateStatus('ready', 'Ready');
+            }
+
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorModal.style.display = 'flex';
+                this.updateStatus('error', 'Error');
+            }
+
+            hideErrorModal() {
+                this.errorModal.style.display = 'none';
+                this.updateStatus('ready', 'Ready');
+            }
+
+            async sendTextMessage() {
+                const text = this.textInput.value.trim();
+                if (!text) return;
+
+                // Add user message to chat
+                this.addUserMessage(text, 'text');
+                this.textInput.value = '';
+
+                this.showLoading();
+
+                try {
+                    const response = await fetch(`${this.apiUrl}/predict/text`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ text: text })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.addBotMessage(data.ai_response, data.emotion, data.confidence, 'text');
+                    } else {
+                        throw new Error(data.error || 'Unknown error occurred');
+                    }
+
+                } catch (error) {
+                    console.error('Error sending text message:', error);
+                    this.showError('Failed to process your message. Please try again.');
+                } finally {
+                    this.hideLoading();
+                }
+            }
+
+            async startRecording() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    this.audioChunks = [];
+                    
+                    this.mediaRecorder.ondataavailable = (event) => {
+                        this.audioChunks.push(event.data);
+                    };
+                    
+                    this.mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+                        this.sendAudioMessage(audioBlob);
+                        
+                        // Stop all tracks to release microphone
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+                    
+                    this.mediaRecorder.start();
+                    this.isRecording = true;
+                    
+                    // Update UI
+                    this.recordBtn.style.display = 'none';
+                    this.stopBtn.style.display = 'flex';
+                    this.recordingIndicator.style.display = 'flex';
+                    this.updateStatus('processing', 'Recording...');
+                    
+                } catch (error) {
+                    console.error('Error starting recording:', error);
+                    this.showError('Could not access microphone. Please check permissions.');
+                }
+            }
+
+            stopRecording() {
+                if (this.mediaRecorder && this.isRecording) {
+                    this.mediaRecorder.stop();
+                    this.isRecording = false;
+                    
+                    // Update UI
+                    this.recordBtn.style.display = 'flex';
+                    this.stopBtn.style.display = 'none';
+                    this.recordingIndicator.style.display = 'none';
+                    this.updateStatus('ready', 'Processing audio...');
+                }
+            }
+
+            handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    this.sendAudioMessage(file);
+                }
+            }
+
+            async sendAudioMessage(audioBlob) {
+                // Add user message to chat
+                this.addUserMessage('🎤 Voice message', 'audio');
+
+                this.showLoading();
+
+                try {
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.wav');
+
+                    const response = await fetch(`${this.apiUrl}/predict/audio`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.addBotMessage(data.ai_response, data.emotion, data.confidence, 'audio');
+                    } else {
+                        throw new Error(data.error || 'Unknown error occurred');
+                    }
+
+                } catch (error) {
+                    console.error('Error sending audio message:', error);
+                    this.showError('Failed to process your audio. Please try again.');
+                } finally {
+                    this.hideLoading();
+                }
+            }
+
+            addUserMessage(content, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'user-message';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar user-avatar';
+                avatar.innerHTML = type === 'audio' ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-user"></i>';
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.innerHTML = `<p>${content}</p>`;
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+                
+                this.chatContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            addBotMessage(response, emotion, confidence, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'bot-message';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar bot-avatar';
+                avatar.innerHTML = '<i class="fas fa-robot"></i>';
+                
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                
+                // Main response
+                const responseP = document.createElement('p');
+                responseP.textContent = response;
+                messageContent.appendChild(responseP);
+                
+                // Emotion info
+                const emotionInfo = document.createElement('div');
+                emotionInfo.className = 'emotion-info';
+                
+                const emotionBadge = document.createElement('span');
+                emotionBadge.className = `emotion-badge emotion-${emotion}`;
+                emotionBadge.textContent = `${this.getEmotionEmoji(emotion)} ${emotion.charAt(0).toUpperCase() + emotion.slice(1)}`;
+                
+                const confidenceText = document.createElement('span');
+                confidenceText.textContent = `Confidence: ${(confidence * 100).toFixed(1)}%`;
+                
+                const confidenceBar = document.createElement('div');
+                confidenceBar.className = 'confidence-bar';
+                
+                const confidenceFill = document.createElement('div');
+                confidenceFill.className = 'confidence-fill';
+                confidenceFill.style.width = `${confidence * 100}%`;
+                
+                confidenceBar.appendChild(confidenceFill);
+                
+                emotionInfo.appendChild(emotionBadge);
+                emotionInfo.appendChild(confidenceText);
+                emotionInfo.appendChild(confidenceBar);
+                
+                messageContent.appendChild(emotionInfo);
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(messageContent);
+                
+                this.chatContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            getEmotionEmoji(emotion) {
+                const emojiMap = {
+                    'happy': '😊',
+                    'sad': '😢',
+                    'angry': '😠',
+                    'fearful': '😰',
+                    'surprised': '😲',
+                    'disgust': '🤢',
+                    'neutral': '😐',
+                    'calm': '😌'
+                };
+                return emojiMap[emotion] || '🤔';
+            }
+
+            scrollToBottom() {
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new EmotionAI();
+        });
+    </script>
+</body>
+</html>
+

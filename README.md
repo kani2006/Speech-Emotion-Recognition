@@ -99,11 +99,6 @@ Follow each dataset’s official source for download and usage terms[file:1].
 ## Result
 <img width="1846" height="991" alt="Screenshot from 2025-10-01 14-35-16" src="https://github.com/user-attachments/assets/ba80178c-2cd2-4580-bafa-21e54ecc6b75" />
 
-## License
-
-No license. All rights reserved.  
-This project is not open source. Use, reproduction, or distribution is not permitted without express permission from the author[file:1].
-
 ---
 
 ## Acknowledgments

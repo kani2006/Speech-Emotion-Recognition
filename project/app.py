@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 # Configuration
 MODEL_PATH = 'models/enhanced_emotion_model.h5'
 ENCODER_PATH = 'models/label_encoder.pkl'
-GEMINI_API_KEY = 'AIzaSyB5-aUDuKck8-EQHRTfVzfL2veaIBO3koA'  # Replace with your actual API key
+GEMINI_API_KEY = 'your-gemini-api-key-here'  # Replace with your actual API key
 GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
 # Global variables for model and encoder
@@ -35,22 +35,22 @@ def load_models():
     try:
         if os.path.exists(MODEL_PATH):
             emotion_model = load_model(MODEL_PATH)
-            logger.info("✅ Emotion recognition model loaded successfully")
+            logger.info("Emotion recognition model loaded successfully")
         else:
-            logger.error(f"❌ Model file not found: {MODEL_PATH}")
+            logger.error(f"Model file not found: {MODEL_PATH}")
             return False
             
         if os.path.exists(ENCODER_PATH):
             with open(ENCODER_PATH, 'rb') as f:
                 label_encoder = pickle.load(f)
-            logger.info("✅ Label encoder loaded successfully")
+            logger.info("Label encoder loaded successfully")
         else:
-            logger.error(f"❌ Encoder file not found: {ENCODER_PATH}")
+            logger.error(f"Encoder file not found: {ENCODER_PATH}")
             return False
             
         return True
     except Exception as e:
-        logger.error(f"❌ Error loading models: {str(e)}")
+        logger.error(f"Error loading models: {str(e)}")
         return False
 
 def extract_features(file_path, max_pad_len=174):
@@ -372,9 +372,9 @@ def test_gemini():
 if __name__ == '__main__':
     # Load models on startup
     if load_models():
-        logger.info("🚀 Starting Flask application with Gemini 2.0 Flash...")
-        logger.info(f"🤖 Using Gemini API URL: {GEMINI_API_URL}")
+        logger.info("Starting Flask application with Gemini 2.0 Flash...")
+        logger.info(f"Using Gemini API URL: {GEMINI_API_URL}")
         app.run(debug=True, host='0.0.0.0', port=5000)
     else:
-        logger.error("❌ Failed to load models. Please check model files.")
+        logger.error("Failed to load models. Please check model files.")
 

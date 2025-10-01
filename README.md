@@ -1,6 +1,6 @@
 # Speech Emotion Recognition
 
-A comprehensive, deep learning-based toolkit and web demo for recognizing emotions from speech using audio and text inputs. This project unifies six major public emotion datasets and delivers robust neural models for emotion classification, with an interactive, empathetic chatbot frontend[file:1].
+A comprehensive, deep learning-based project and web demo for recognizing emotions from speech using audio inputs. This project unifies six major public emotion datasets and delivers robust neural models for emotion classification, with an interactive, empathetic chatbot frontend[file:1].
 
 ---
 

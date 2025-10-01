@@ -21,7 +21,7 @@ A comprehensive, deep learning-based project and web demo for recognizing emotio
 
 1. **Clone the repository:**
    ```
-   git clone https://github.com/yourusername/speech-emotion-recognition.git
+   git clone https://github.com/kani2006/speech-emotion-recognition.git
    cd speech-emotion-recognition
    ```
 

@@ -95,20 +95,20 @@ def explore_dataset_structure(dataset_name, path):
     print(f"🔍 Exploring {dataset_name} structure at: {path}")
     
     if not os.path.exists(path):
-        print(f"❌ Path does not exist: {path}")
+        print(f"Path does not exist: {path}")
         return 0
     
     audio_files = find_all_audio_files(path)
-    print(f"📁 Found {len(audio_files)} audio files in {dataset_name}")
+    print(f"Found {len(audio_files)} audio files in {dataset_name}")
     
     # Show directory structure (first few levels)
     if audio_files:
-        print("📂 Directory structure sample:")
+        print("Directory structure sample:")
         shown_dirs = set()
         for file_path in audio_files[:10]:  # Show first 10 files' directories
             rel_path = os.path.relpath(os.path.dirname(file_path), path)
             if rel_path not in shown_dirs and rel_path != '.':
-                print(f"   📁 {rel_path}")
+                print(f"   {rel_path}")
                 shown_dirs.add(rel_path)
         if len(audio_files) > 10:
             print(f"   ... and more directories")
@@ -208,13 +208,13 @@ def load_dataset(dataset_name, path):
     error_count = 0
     
     if not os.path.exists(path):
-        print(f"❌ {dataset_name} path not found: {path}")
+        print(f"{dataset_name} path not found: {path}")
         return [], []
     
     # Explore structure first
     total_files = explore_dataset_structure(dataset_name, path)
     if total_files == 0:
-        print(f"❌ No audio files found in {dataset_name}")
+        print(f"No audio files found in {dataset_name}")
         return [], []
     
     print(f"🎵 Processing {dataset_name} files...")
@@ -250,7 +250,7 @@ def load_dataset(dataset_name, path):
                 file_count += 1
                 
                 if file_count % 100 == 0:
-                    print(f"   ✅ Processed {file_count}/{total_files} {dataset_name} files...")
+                    print(f"   Processed {file_count}/{total_files} {dataset_name} files...")
             else:
                 error_count += 1
         else:
@@ -258,9 +258,9 @@ def load_dataset(dataset_name, path):
                 print(f"   ❓ Could not determine emotion for: {filename}")
             error_count += 1
     
-    print(f"✅ {dataset_name}: Successfully loaded {file_count} files")
+    print(f" {dataset_name}: Successfully loaded {file_count} files")
     if error_count > 0:
-        print(f"⚠️  {dataset_name}: {error_count} files had errors or unknown emotions")
+        print(f"{dataset_name}: {error_count} files had errors or unknown emotions")
     
     return features, labels
 
@@ -278,12 +278,12 @@ def create_combined_dataset():
     for dataset_name, path in DATASET_PATHS.items():
         if os.path.exists(path):
             available_datasets.append(dataset_name)
-            print(f"✅ {dataset_name}: Found at {path}")
+            print(f" {dataset_name}: Found at {path}")
         else:
-            print(f"❌ {dataset_name}: Not found at {path}")
+            print(f" {dataset_name}: Not found at {path}")
     
     if not available_datasets:
-        print("❌ No datasets found! Please check the paths.")
+        print(" No datasets found! Please check the paths.")
         return None, None, None
     
     print(f"\n📊 Processing {len(available_datasets)} available datasets...")
@@ -308,7 +308,7 @@ def create_combined_dataset():
         print("-" * 40)
     
     if not all_features:
-        print("❌ No data loaded from any dataset!")
+        print("No data loaded from any dataset!")
         return None, None, None
     
     # Convert to numpy arrays
@@ -320,7 +320,7 @@ def create_combined_dataset():
     print("📈 COMPREHENSIVE DATASET STATISTICS")
     print("="*80)
     
-    print(f"🎯 Dataset Overview:")
+    print(f"Dataset Overview:")
     print(f"   Total samples: {len(X):,}")
     print(f"   Available datasets: {len(available_datasets)}")
     print(f"   Feature shape: {X.shape}")
@@ -328,7 +328,7 @@ def create_combined_dataset():
     
     # Overall emotion distribution
     unique_emotions, counts = np.unique(y, return_counts=True)
-    print(f"\n🎭 Overall Emotion Distribution:")
+    print(f"\nOverall Emotion Distribution:")
     total_samples = len(y)
     
     for emotion, count in zip(unique_emotions, counts):
@@ -359,11 +359,11 @@ def create_combined_dataset():
     print(f"   Balance ratio: {balance_ratio:.3f} (1.0 = perfectly balanced)")
     
     if balance_ratio < 0.2:
-        print("   ⚠️  Dataset is highly imbalanced - consider data augmentation")
+        print("   Dataset is highly imbalanced - consider data augmentation")
     elif balance_ratio < 0.5:
-        print("   ⚠️  Dataset has moderate imbalance")
+        print("  Dataset has moderate imbalance")
     else:
-        print("   ✅ Dataset is reasonably balanced")
+        print("  Dataset is reasonably balanced")
     
     return X, y, unique_emotions
 
@@ -487,9 +487,9 @@ def save_training_info(history, test_acc, test_loss, emotion_classes, training_t
     print(f"💾 Training info saved to {MODEL_SAVE_PATH}{TRAINING_HISTORY_NAME}")
 
 def main():
-    print("🎭 ADVANCED MULTI-DATASET SPEECH EMOTION RECOGNITION")
+    print("ADVANCED MULTI-DATASET SPEECH EMOTION RECOGNITION")
     print("="*80)
-    print("🎯 Supporting 6 Major Emotion Datasets:")
+    print("Supporting 6 Major Emotion Datasets:")
     print("   • RAVDESS  • TESS     • CREMA-D")
     print("   • EMO-DB   • IEMOCAP  • SAVEE")
     print("="*80)
@@ -499,29 +499,29 @@ def main():
     available_count = 0
     for dataset_name, path in DATASET_PATHS.items():
         exists = os.path.exists(path)
-        status = "✅ Found" if exists else "❌ Not Found"
+        status = "Found" if exists else "❌ Not Found"
         print(f"   {dataset_name:<10}: {status}")
         if exists:
             available_count += 1
     
     if available_count == 0:
-        print("\n❌ No dataset paths found!")
+        print("\nNo dataset paths found!")
         print("Please update the DATASET_PATHS dictionary with correct paths.")
         return
     
-    print(f"\n✅ Found {available_count}/6 datasets available for training")
+    print(f"\nFound {available_count}/6 datasets available for training")
     
     start_time = datetime.now()
     
     # Load and prepare data
     print("\n" + "="*80)
-    print("📊 LOADING AND PREPARING MULTI-DATASET")
+    print("LOADING AND PREPARING MULTI-DATASET")
     print("="*80)
     
     X_combined, y_combined, emotion_classes = create_combined_dataset()
     
     if X_combined is None:
-        print("❌ Cannot proceed without data. Please check dataset paths.")
+        print(" Cannot proceed without data. Please check dataset paths.")
         return
     
     # Prepare dataset statistics
@@ -534,7 +534,7 @@ def main():
     }
     
     print("\n" + "="*80)
-    print("🔧 PREPARING DATA FOR TRAINING")
+    print(" PREPARING DATA FOR TRAINING")
     print("="*80)
     
     # Encode labels
@@ -555,25 +555,25 @@ def main():
     print(f"   Memory usage: {(X_train.nbytes + y_train.nbytes)/(1024*1024):.1f} MB")
     
     print("\n" + "="*80)
-    print("🏗️  BUILDING ENHANCED NEURAL NETWORK")
+    print("BUILDING ENHANCED NEURAL NETWORK")
     print("="*80)
     
     model = build_model(X_train.shape[1], y_train.shape[1])
     
-    print("🧠 Model Architecture Summary:")
+    print(" Model Architecture Summary:")
     model.summary()
     
     total_params = model.count_params()
-    print(f"\n📊 Model Statistics:")
+    print(f"\n Model Statistics:")
     print(f"   Total Parameters: {total_params:,}")
     print(f"   Trainable Parameters: {total_params:,}")
     print(f"   Model Size: ~{total_params * 4 / (1024*1024):.1f} MB")
     
     print("\n" + "="*80)
-    print("🚀 TRAINING MULTI-DATASET MODEL")
+    print(" TRAINING MULTI-DATASET MODEL")
     print("="*80)
-    print("⏱️  This may take 15-45 minutes depending on your hardware...")
-    print("🎯 Training with 100 epochs, batch size 32, 20% validation split")
+    print("This may take 15-45 minutes depending on your hardware...")
+    print("Training with 100 epochs, batch size 32, 20% validation split")
     
     history = model.fit(
         X_train, y_train, 
@@ -584,7 +584,7 @@ def main():
     )
     
     print("\n" + "="*80)
-    print("📊 EVALUATING MODEL PERFORMANCE")
+    print(" EVALUATING MODEL PERFORMANCE")
     print("="*80)
     
     test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
@@ -592,9 +592,9 @@ def main():
     end_time = datetime.now()
     training_time = (end_time - start_time).total_seconds() / 60
     
-    print(f"🎉 TRAINING COMPLETED SUCCESSFULLY!")
+    print(f"TRAINING COMPLETED SUCCESSFULLY!")
     print(f"{'='*80}")
-    print(f"🏆 FINAL PERFORMANCE METRICS:")
+    print(f"FINAL PERFORMANCE METRICS:")
     print(f"   Test Accuracy: {test_acc:.4f} ({test_acc*100:.2f}%)")
     print(f"   Test Loss: {test_loss:.4f}")
     print(f"   Training Time: {training_time:.2f} minutes")
@@ -602,19 +602,19 @@ def main():
     print(f"   Final Training Accuracy: {history.history['accuracy'][-1]:.4f} ({history.history['accuracy'][-1]*100:.2f}%)")
     
     print("\n" + "="*80)
-    print("💾 SAVING MODEL AND COMPONENTS")
+    print(" SAVING MODEL AND COMPONENTS")
     print("="*80)
     
     # Save model
     model_path = os.path.join(MODEL_SAVE_PATH, MODEL_NAME)
     model.save(model_path)
-    print(f"✅ Model saved to: {model_path}")
+    print(f"Model saved to: {model_path}")
     
     # Save label encoder
     encoder_path = os.path.join(MODEL_SAVE_PATH, ENCODER_NAME)
     with open(encoder_path, 'wb') as f:
         pickle.dump(le, f)
-    print(f"✅ Label encoder saved to: {encoder_path}")
+    print(f"Label encoder saved to: {encoder_path}")
     
     # Save training plots
     plot_training_history(history)
@@ -622,11 +622,11 @@ def main():
     # Save training information
     save_training_info(history, test_acc, test_loss, emotion_classes, training_time, dataset_stats)
     
-    print(f"\n🎉 ALL COMPONENTS SAVED SUCCESSFULLY!")
-    print(f"📁 Model directory: {os.path.abspath(MODEL_SAVE_PATH)}")
-    print(f"🚀 Ready to run conversational AI: python run_ai.py")
+    print(f"\nALL COMPONENTS SAVED SUCCESSFULLY!")
+    print(f" Model directory: {os.path.abspath(MODEL_SAVE_PATH)}")
+    print(f" Ready to run conversational AI: python run_ai.py")
     
-    print(f"\n🎭 TRAINED EMOTION CLASSES:")
+    print(f"\nTRAINED EMOTION CLASSES:")
     print(f"{'='*50}")
     for i, emotion in enumerate(le.classes_):
         count = dataset_stats['emotion_distribution'].get(emotion, 0)
@@ -634,7 +634,7 @@ def main():
     
     print(f"\n📊 DATASETS SUCCESSFULLY INTEGRATED:")
     for dataset_name in dataset_stats['datasets_used']:
-        print(f"   ✅ {dataset_name}")
+        print(f"    {dataset_name}")
 
 if __name__ == "__main__":
     main()

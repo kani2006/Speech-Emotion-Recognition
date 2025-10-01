@@ -1,19 +1,19 @@
 # Speech Emotion Recognition
 
-A comprehensive, deep learning-based project and web demo for recognizing emotions from speech using audio inputs. This project unifies six major public emotion datasets and delivers robust neural models for emotion classification, with an interactive, empathetic chatbot frontend[file:1].
+A comprehensive, deep learning-based project and web demo for recognizing emotions from speech using audio inputs. This project unifies six major public emotion datasets and delivers robust neural models for emotion classification, with an interactive, empathetic chatbot frontend.
 
 ---
 
 ## Features
 
-- Supports six major datasets: RAVDESS, TESS, CREMA-D, EMO-DB, IEMOCAP, and SAVEE[file:1].
+- Supports six major datasets: RAVDESS, TESS, CREMA-D, EMO-DB, IEMOCAP, and SAVEE.
 - Unifies and maps emotion labels from various datasets to a common taxonomy for joint or cross-dataset training.
 - Deep neural network model with batch normalization, dropout, LeakyReLU activations, and Adam optimizer.
 - Automatic feature extraction (MFCCs) and pre-processing from audio files.
 - Robust label encoding, data balancing, and performance visualization.
 - Saves models, encoders, and training history for reproducible experiments.
-- Includes a frontend for interactive chat, accepting audio (recording/upload) or text input, and generating empathetic AI chatbot replies with emotion feedback[file:1].
-- Web UI shows analyzed emotions, confidence scores, and friendly feedback (including emoji/avatars)[file:1].
+- Includes a frontend for interactive chat, accepting audio (recording/upload) or text input, and generating empathetic AI chatbot replies with emotion feedback.
+- Web UI shows analyzed emotions, confidence scores, and friendly feedback (including emoji/avatars).
 
 ---
 
@@ -31,11 +31,11 @@ A comprehensive, deep learning-based project and web demo for recognizing emotio
    ```
 
 3. **Prepare dataset folders:**
-   - Download each dataset (RAVDESS, TESS, CREMA-D, EMO-DB, IEMOCAP, SAVEE)[file:1].
+   - Download each dataset (RAVDESS, TESS, CREMA-D, EMO-DB, IEMOCAP, SAVEE).
    - Update the `DATASETPATHS` in the main script to set local dataset paths.
 
 4. **Configuration:**
-   - Adjust main parameters, model save paths, and optionally set up Gemini or OpenAI API keys for advanced chatbot features in the UI[file:1].
+   - Adjust main parameters, model save paths, and optionally set up Gemini or OpenAI API keys for advanced chatbot features in the UI.
 
 ---
 
@@ -51,7 +51,7 @@ A comprehensive, deep learning-based project and web demo for recognizing emotio
    - Final model saved to `/models/enhancedemotionmodel.h5`.
    - Label encoder and training history saved for later use.
 
-2. Training and validation progress is plotted and saved automatically[file:1].
+2. Training and validation progress is plotted and saved automatically.
 
 ### Running the Web Application
 
@@ -93,7 +93,7 @@ A comprehensive, deep learning-based project and web demo for recognizing emotio
 - **IEMOCAP**: Interactive Emotional Dyadic Motion Capture Database
 - **SAVEE**: Surrey Audio-Visual Expressed Emotion Database
 
-Follow each dataset’s official source for download and usage terms[file:1].
+Follow each dataset’s official source for download and usage terms.
 
 ---
 ## Result

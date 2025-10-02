@@ -103,4 +103,4 @@ Follow each dataset’s official source for download and usage terms.
 
 ## Acknowledgments
 
-Thanks to contributors, academic sources, and open dataset providers that made robust emotion recognition research possible[file:1].
+Thanks to contributors, academic sources, and open dataset providers that made robust emotion recognition research possible.
